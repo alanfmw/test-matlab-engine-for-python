@@ -282,13 +282,13 @@ if __name__ == '__main__':
         long_description = rm.read()
 
     setup(
-        name="matlabengine",
+        name="testmatlabengine",
         # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
         version="9.12",
         description='A module to call MATLAB from Python',
         author='MathWorks',
         license="MathWorks XSLA License",
-        url='https://github.com/mathworks/matlab-engine-for-python/',
+        url='https://github.com/alanfmw/test-matlab-engine-for-python/',
         long_description=long_description,
         long_description_content_type="text/markdown",
         package_dir={'': 'src'},
