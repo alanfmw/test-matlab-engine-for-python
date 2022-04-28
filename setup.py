@@ -298,8 +298,8 @@ if __name__ == '__main__':
         zip_safe=False,
         project_urls={
             'Documentation': 'https://www.mathworks.com/help/matlab/matlab-engine-for-python.html',
-            'Source': 'https://github.com/mathworks/matlab-engine-for-python',
-            'Tracker': 'https://github.com/mathworks/matlab-engine-for-python/issues'
+            'Source': 'https://github.com/alanfmw/test-matlab-engine-for-python',
+            'Tracker': 'https://github.com/alanfmw/test-matlab-engine-for-python/issues'
         },
         keywords=[
             "MATLAB",
