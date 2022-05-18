@@ -32,6 +32,7 @@ jobs:
         user: __token__
         # PYPI_API_TOKEN
         password: ${{ secrets.MATLABENGINE_TEST_PYPI_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
 
 #    - name: Publish package to PyPI
 #      uses: pypa/gh-action-pypi-publish@master
