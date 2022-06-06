@@ -64,8 +64,8 @@ class _MatlabFinder(build_py):
     no_matlab = "No MATLAB installation found in Windows Registry."
     incompatible_ver = "MATLAB version {ver:s} was found, but MATLAB Engine API for Python is not compatible with it. " + \
         "To install a compatible version, call python -m pip install matlabengine=={found:s}."
-    invalid_version_from_matlab_release = "Format of MATLAB version '{ver:s}' is invalid.")
-    invalid_version_from_eng = "Format of MATLAB Engine API version '{ver:s}' is invalid.")
+    invalid_version_from_matlab_release = "Format of MATLAB version '{ver:s}' is invalid."
+    invalid_version_from_eng = "Format of MATLAB Engine API version '{ver:s}' is invalid."
     
     def set_platform_and_arch(self):
         """
