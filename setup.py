@@ -24,7 +24,7 @@ class _MatlabFinder(build_py):
     MATLAB_REL = 'R2021b'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
-    MATLAB_VER = '9.11.7'
+    MATLAB_VER = '9.11.8'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
     SUPPORTED_PYTHON_VERSIONS = set(['3.7', '3.8', '3.9'])
