@@ -3,6 +3,7 @@
 from setuptools import setup, find_packages
 from setuptools.command.build_py import build_py 
 import os
+import re
 import sys
 import platform
 import xml.etree.ElementTree as xml
@@ -63,6 +64,8 @@ class _MatlabFinder(build_py):
     no_matlab = "No MATLAB installation found in Windows Registry."
     incompatible_ver = "MATLAB version {ver:s} was found, but MATLAB Engine API for Python is not compatible with it. " + \
         "To install a compatible version, call python -m pip install matlabengine=={found:s}."
+    invalid_version_from_matlab_release = "Format of MATLAB version '{ver:s}' is invalid.")
+    invalid_version_from_eng = "Format of MATLAB Engine API version '{ver:s}' is invalid.")
     
     def set_platform_and_arch(self):
         """
@@ -187,7 +190,8 @@ class _MatlabFinder(build_py):
     def verify_matlab_release(self, root):
         """
         Parses VersionInfo.xml to verify the MATLAB release matches the supported release
-        for the Python Engine.
+        for the Python Engine. The major and minor version numbers must match. Everything
+        else will be ignored.
         """
         version_info = os.path.join(root, 'VersionInfo.xml')
         if not os.path.isfile(version_info):
@@ -202,7 +206,18 @@ class _MatlabFinder(build_py):
                 matlab_release = self.found_matlab = child.text
                 break
         
-        if matlab_release != self.MATLAB_REL:
+        re_major_minor = "^(\d+)\.(\d+)"
+        matlab_release_match = re.match(re_major_minor, matlab_release)
+        if not matlab_release_match:
+            raise RuntimeError(f"{self.invalid_version_from_matlab_release.format(ver=matlab_release)}")
+        eng_match = re.match(re_major_minor, self.MATLAB_REL)
+        if not eng_match:
+            raise RuntimeError(f"{self.invalid_version_from_eng.format(ver=self.MATLAB_REL)}")
+        
+        matlab_release_major_minor = (matlab_release_match.group(1), matlab_release_match.group(2))
+        eng_major_minor = (eng_match.group(1), eng_match.group(2))
+        
+        if matlab_release_major_minor != eng_major_minor:
             return False
         return True
 
