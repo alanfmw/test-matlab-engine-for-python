@@ -24,7 +24,7 @@ class _MatlabFinder(build_py):
     MATLAB_REL = 'R2021b'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
-    MATLAB_VER = '9.11.9'
+    MATLAB_VER = '9.11.10'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
     SUPPORTED_PYTHON_VERSIONS = set(['3.7', '3.8', '3.9'])
@@ -174,7 +174,7 @@ class _MatlabFinder(build_py):
             found_vers.append(sub_key)
             # Example: the version in the registry could be "9.13.1" whereas our version is "9.13"
             # we still want to allow this
-            if self._check_matlab_release_against_engine(sub_key)
+            if self._check_matlab_release_against_engine(sub_key):
                 key_value = sub_key
                 break
         
