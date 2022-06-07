@@ -24,7 +24,7 @@ class _MatlabFinder(build_py):
     MATLAB_REL = 'R2021b'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
-    MATLAB_VER = '9.11.8'
+    MATLAB_VER = '9.11.9'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
     SUPPORTED_PYTHON_VERSIONS = set(['3.7', '3.8', '3.9'])
@@ -174,7 +174,7 @@ class _MatlabFinder(build_py):
             found_vers.append(sub_key)
             # Example: the version in the registry could be "9.13.1" whereas our version is "9.13"
             # we still want to allow this
-            if sub_key.startswith(self.MATLAB_VER):
+            if self._check_matlab_release_against_engine(sub_key)
                 key_value = sub_key
                 break
         
@@ -187,6 +187,22 @@ class _MatlabFinder(build_py):
 
         return key_value       
 
+    def _check_matlab_release_against_engine(self, matlab_release):
+        re_major_minor = "^(\d+)\.(\d+)"
+        matlab_release_match = re.match(re_major_minor, matlab_release)
+        if not matlab_release_match:
+            raise RuntimeError(f"{self.invalid_version_from_matlab_release.format(ver=matlab_release)}")
+        eng_match = re.match(re_major_minor, self.MATLAB_REL)
+        if not eng_match:
+            raise RuntimeError(f"{self.invalid_version_from_eng.format(ver=self.MATLAB_REL)}")
+        
+        matlab_release_major_minor = (matlab_release_match.group(1), matlab_release_match.group(2))
+        eng_major_minor = (eng_match.group(1), eng_match.group(2))
+        
+        if matlab_release_major_minor != eng_major_minor:
+            return False
+        return True
+    
     def verify_matlab_release(self, root):
         """
         Parses VersionInfo.xml to verify the MATLAB release matches the supported release
@@ -205,21 +221,7 @@ class _MatlabFinder(build_py):
             if child.tag == 'release':
                 matlab_release = self.found_matlab = child.text
                 break
-        
-        re_major_minor = "^(\d+)\.(\d+)"
-        matlab_release_match = re.match(re_major_minor, matlab_release)
-        if not matlab_release_match:
-            raise RuntimeError(f"{self.invalid_version_from_matlab_release.format(ver=matlab_release)}")
-        eng_match = re.match(re_major_minor, self.MATLAB_REL)
-        if not eng_match:
-            raise RuntimeError(f"{self.invalid_version_from_eng.format(ver=self.MATLAB_REL)}")
-        
-        matlab_release_major_minor = (matlab_release_match.group(1), matlab_release_match.group(2))
-        eng_major_minor = (eng_match.group(1), eng_match.group(2))
-        
-        if matlab_release_major_minor != eng_major_minor:
-            return False
-        return True
+        return self._check_matlab_release_against_engine(matlab_release)
 
     def search_path_for_directory_unix(self):
         """
