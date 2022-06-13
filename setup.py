@@ -24,7 +24,7 @@ class _MatlabFinder(build_py):
     MATLAB_REL = 'R2021b'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
-    MATLAB_VER = '9.11.12'
+    MATLAB_VER = '9.11.13'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
     SUPPORTED_PYTHON_VERSIONS = set(['3.7', '3.8', '3.9'])
@@ -64,7 +64,7 @@ class _MatlabFinder(build_py):
     no_matlab = "No MATLAB installation found in Windows Registry."
     incompatible_ver = "MATLAB version {ver:s} was found, but MATLAB Engine API for Python is not compatible with it. " + \
         "To install a compatible version, call python -m pip install matlabengine=={found:s}."
-    invalid_version_from_matlab_release = "Format of MATLAB version '{ver:s}' is invalid."
+    invalid_version_from_matlab_ver = "Format of MATLAB version '{ver:s}' is invalid."
     invalid_version_from_eng = "Format of MATLAB Engine API version '{ver:s}' is invalid."
     
     def set_platform_and_arch(self):
@@ -174,7 +174,7 @@ class _MatlabFinder(build_py):
             found_vers.append(sub_key)
             # Example: the version in the registry could be "9.13.1" whereas our version is "9.13"
             # we still want to allow this
-            if self._check_matlab_release_against_engine(sub_key):
+            if self._check_matlab_ver_against_engine(sub_key):
                 key_value = sub_key
                 break
         
@@ -187,21 +187,19 @@ class _MatlabFinder(build_py):
 
         return key_value       
 
-    def _check_matlab_release_against_engine(self, matlab_release):
+    def _check_matlab_ver_against_engine(self, matlab_ver):
         re_major_minor = "^(\d+)\.(\d+)"
-        matlab_release_match = re.match(re_major_minor, matlab_release)
-        if not matlab_release_match:
-            raise RuntimeError(f"{self.invalid_version_from_matlab_release.format(ver=matlab_release)}")
-        eng_match = re.match(re_major_minor, self.MATLAB_REL)
+        matlab_ver_match = re.match(re_major_minor, matlab_ver)
+        if not matlab_ver_match:
+            raise RuntimeError(f"{self.invalid_version_from_matlab_ver.format(ver=matlab_ver)}")
+        eng_match = re.match(re_major_minor, self.MATLAB_VER)
         if not eng_match:
-            raise RuntimeError(f"{self.invalid_version_from_eng.format(ver=self.MATLAB_REL)}")
+            raise RuntimeError(f"{self.invalid_version_from_eng.format(ver=self.MATLAB_VER)}")
         
-        matlab_release_major_minor = (matlab_release_match.group(1), matlab_release_match.group(2))
+        matlab_ver_major_minor = (matlab_ver_match.group(1), matlab_ver_match.group(2))
         eng_major_minor = (eng_match.group(1), eng_match.group(2))
         
-        if matlab_release_major_minor != eng_major_minor:
-            return False
-        return True
+        return (matlab_ver_major_minor == eng_major_minor)
     
     def verify_matlab_release(self, root):
         """
@@ -301,7 +299,7 @@ if __name__ == '__main__':
     setup(
         name="matlabengine",
         # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
-        version="9.11.12",
+        version="9.11.13",
         description='A module to call MATLAB from Python',
         author='MathWorks',
         license="MathWorks XSLA License",
