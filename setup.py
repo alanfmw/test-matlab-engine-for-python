@@ -24,7 +24,7 @@ class _MatlabFinder(build_py):
     MATLAB_REL = 'R2021b'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
-    MATLAB_VER = '9.11.11'
+    MATLAB_VER = '9.11.12'
 
     # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
     SUPPORTED_PYTHON_VERSIONS = set(['3.7', '3.8', '3.9'])
@@ -221,7 +221,7 @@ class _MatlabFinder(build_py):
             if child.tag == 'release':
                 matlab_release = self.found_matlab = child.text
                 break
-        return self._check_matlab_release_against_engine(matlab_release)
+        return matlab_release == self.MATLAB_REL
 
     def search_path_for_directory_unix(self):
         """
@@ -301,7 +301,7 @@ if __name__ == '__main__':
     setup(
         name="matlabengine",
         # MUST_BE_UPDATED_EACH_RELEASE (Search repo for this string)
-        version="9.11.11",
+        version="9.11.12",
         description='A module to call MATLAB from Python',
         author='MathWorks',
         license="MathWorks XSLA License",
